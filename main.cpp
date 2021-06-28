@@ -1,8 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <random>
+//#include <random>
+#include <string>
 #define DIMENSIONS       3
+
+bool isNumber(std::string s)
+{
+    for (int i = 0; i < s.length(); i++)
+        if (isdigit(s[i]) == false)
+            return false;
+
+    return true;
+}
+
 class board {
 public:
     board() {
@@ -17,7 +28,7 @@ public:
     }
 
     bool is_empty(int row, int col) {
-        if (abs(row) >= table.size() || abs(col) >= table.size())
+        if (row >= table.size() || col >= table.size() || row < 0 || col < 0)
             return false;
         if (table[row][col] == -1) {
             return true;
@@ -211,12 +222,14 @@ public:
             // Insert prompt to ask coords
             // Continue until the correct move is given
             while (true) {
-                int row, col;
+                std::string row, col;
                 std::cout << "INPUT ROW:" << std::endl;
                 std::cin >> row;
                 std::cout << "INPUT COLUMN:" << std::endl;
                 std::cin >> col;
-                if (b.set(row-1, col-1, symbol))
+                if (!isNumber(row) || !isNumber(col))
+                    std::cout << "WRONG INPUT!" << std::endl;
+                 else if (b.set(std::stoi(row)-1, std::stoi(col)-1, symbol))
                     return;
                 else
                     std::cout << "WRONG INPUT!" << std::endl;
